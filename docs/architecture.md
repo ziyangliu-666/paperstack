@@ -2,9 +2,15 @@
 
 ## Core idea
 
-paperstack chains research artifacts through 7 skills. Each skill reads prior artifacts and writes new ones to deterministic paths. Every skill enforces intellectual rigor through forcing questions — probing questions that demand specificity, challenge assumptions, and refuse vague answers.
+paperstack chains research artifacts through 8 skills. Each skill reads prior artifacts and writes new ones to deterministic paths. Every skill enforces intellectual rigor through forcing questions — probing questions that demand specificity, challenge assumptions, and refuse vague answers.
+
+The skills split into two independent paths:
+- **Research workflow** (7 skills): question framing → reading → critique → synthesis
+- **Author self-review** (1 skill): manuscript → conference-style review → revision checklist
 
 ## Artifact dependency graph
+
+### Research workflow
 
 ```
 research-brief.md  (from /research-intake)
@@ -29,10 +35,32 @@ comparison-matrix.md  (from /compare-papers)
 synthesis.md  (from /synthesis)
 ```
 
+### Author self-review (independent path)
+
+```
+current workspace
+    |
+    v
+manuscript detection + whitelist scan
+    |
+    v
+venue guidance lookup
+    |   ├─ live success
+    |   ├─ cache fallback (loud)
+    |   └─ generic fallback (loud)
+    |
+    v
+.paperstack/
+    ├─ latest-review.md
+    ├─ history/YYYYMMDD-HHMMSS-review.md
+    └─ cache/venue-guidance/{venue-key}.md
+```
+
 ## Artifact chaining table
 
 | Skill | Reads | Writes |
 |---|---|---|
+| `/draft-review` | Workspace manuscript + support files | `.paperstack/latest-review.md`, `.paperstack/history/*`, `.paperstack/cache/venue-guidance/*` |
 | `/research-intake` | (nothing) | `docs/research/current/research-brief.md` |
 | `/literature-map` | `research-brief.md` | `docs/research/current/literature-map.md` |
 | `/paper-triage` | `research-brief.md`, `literature-map.md` | `docs/research/current/reading-queue.md` |
@@ -88,4 +116,6 @@ Skills reference these files with: "Read `references/<filename>` for the detaile
 2. **Deterministic paths**: Every artifact has one canonical location. No ambiguity.
 3. **Append, don't destroy**: Skills update existing artifacts safely. Prior work is preserved.
 4. **Templates define structure**: Required sections are defined in `templates/`. Skills enforce them.
-5. **Minimal but extensible**: 7 skills, not 70. Add more when you need them.
+5. **Minimal but extensible**: 8 skills, not 80. Add more when you need them.
+6. **Independent paths coexist**: The research workflow and author self-review are separate artifact chains. They share critique dimensions but not output paths or artifact dependencies.
+7. **Support files stay narrow**: Draft review reads manuscript-adjacent files by default, not rebuttal or response artifacts from prior review cycles.

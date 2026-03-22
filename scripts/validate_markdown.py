@@ -18,6 +18,16 @@ import sys
 
 # Required headings per artifact type (matched by filename pattern)
 REQUIRED_HEADINGS = {
+    "draft-review": [
+        "Paper Summary",
+        "Strengths",
+        "Major Concerns",
+        "Minor Concerns",
+        "Questions for Authors",
+        "Missing References",
+        "Verdict",
+        "Revision Checklist",
+    ],
     "research-brief": [
         "Research Question",
         "Motivation",
@@ -93,7 +103,9 @@ PLACEHOLDER_PATTERNS = [
 def detect_type(filepath: str) -> str:
     """Detect artifact type from filename."""
     basename = os.path.basename(filepath).lower()
-    if "research-brief" in basename:
+    if "draft-review" in basename or "sample-review" in basename or "/draft-review/" in filepath:
+        return "draft-review"
+    elif "research-brief" in basename:
         return "research-brief"
     elif "literature-map" in basename:
         return "literature-map"
@@ -182,6 +194,8 @@ def validate_file(filepath: str) -> list[str]:
         issues.append(f"Could not detect artifact type for: {filepath}")
         return issues
 
+    is_template = "/templates/" in filepath.replace("\\", "/")
+
     # Check required headings
     headings = extract_headings(content)
     required = REQUIRED_HEADINGS.get(artifact_type, [])
@@ -195,9 +209,10 @@ def validate_file(filepath: str) -> list[str]:
         issues.append(f"Empty section: '{section}'")
 
     # Check for placeholders
-    placeholders = find_placeholders(content)
-    for line_num, placeholder in placeholders:
-        issues.append(f"Unfilled placeholder on line {line_num}: {placeholder}")
+    if not is_template:
+        placeholders = find_placeholders(content)
+        for line_num, placeholder in placeholders:
+            issues.append(f"Unfilled placeholder on line {line_num}: {placeholder}")
 
     return issues
 
