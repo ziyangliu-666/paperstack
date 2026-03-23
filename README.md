@@ -125,7 +125,7 @@ One command to stress-test an idea before committing. Get a verdict (PURSUE / RE
 
 Open Claude Code and paste this:
 
-> Install paperstack: run **`git clone https://github.com/ziyangliu-666/paperstack.git ~/.claude/skills/paperstack`** then add a "paperstack" section to CLAUDE.md that lists the available skills: /idea-test, /idea-sharpen, /contribution-frame, /draft-review, /research-intake, /literature-map, /paper-triage, /paper-read, /paper-critic, /compare-papers, /synthesis.
+> Install paperstack: run **`git clone https://github.com/ziyangliu-666/paperstack.git ~/.claude/skills/paperstack && ~/.claude/skills/paperstack/setup`** then add a "paperstack" section to CLAUDE.md that lists the available skills: /idea-test, /idea-sharpen, /contribution-frame, /draft-review, /research-intake, /literature-map, /paper-triage, /paper-read, /paper-critic, /compare-papers, /synthesis.
 
 Claude does the rest.
 
@@ -133,9 +133,10 @@ Claude does the rest.
 
 ```bash
 git clone https://github.com/ziyangliu-666/paperstack.git ~/.claude/skills/paperstack
+~/.claude/skills/paperstack/setup
 ```
 
-Add to your `CLAUDE.md` (project or `~/.claude/CLAUDE.md`):
+The `setup` script creates symlinks so Claude Code can discover each skill. Then add to your `CLAUDE.md` (project or `~/.claude/CLAUDE.md`):
 
 ```markdown
 ## paperstack
@@ -146,12 +147,16 @@ Available skills: /idea-test, /idea-sharpen, /contribution-frame, /draft-review,
 
 ### Add to a repo (so collaborators get it)
 
+Copy just the skill directories into your project:
+
 ```bash
-cp -Rf ~/.claude/skills/paperstack .claude/skills/paperstack
-rm -rf .claude/skills/paperstack/.git
+mkdir -p .claude/skills/paperstack
+for skill in ~/.claude/skills/paperstack/*/; do
+  [ -f "$skill/SKILL.md" ] && cp -Rf "$skill" .claude/skills/paperstack/
+done
 ```
 
-Commit `.claude/skills/paperstack/` to your repo. `git clone` just works for everyone.
+Commit `.claude/skills/paperstack/` to your repo.
 
 ## Project structure
 
@@ -177,7 +182,18 @@ paperstack/
     sample-topic/              # Research workflow example
     draft-review/              # Draft review output example
     idea-test/                 # Idea assessment example
-  .claude/skills/paperstack/   # Skill definitions
+  idea-test/                   # Skill definitions (each with SKILL.md)
+  idea-sharpen/
+  contribution-frame/
+  draft-review/
+  research-intake/
+  literature-map/
+  paper-triage/
+  paper-read/
+  paper-critic/
+  compare-papers/
+  synthesis/
+  setup                        # Install script (creates symlinks)
 ```
 
 ## Design principles

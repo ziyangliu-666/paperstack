@@ -122,6 +122,18 @@ paperstack's anti-sycophancy rules target two directions:
 
 The replacement for both: specificity. Name the claim. Cite the evidence. State your position. Say what would change your mind.
 
+## Skill discovery
+
+Each skill lives in its own directory at the repo root (e.g., `idea-test/SKILL.md`). When the repo is cloned to `~/.claude/skills/paperstack/`, the `setup` script creates symlinks so Claude Code can discover each skill:
+
+```
+~/.claude/skills/idea-test  →  paperstack/idea-test
+~/.claude/skills/paper-read →  paperstack/paper-read
+...
+```
+
+This follows the same pattern used by gstack: mono-repo at `~/.claude/skills/<name>/`, symlinks for each skill.
+
 ## References pattern
 
 Long rubrics and detailed evaluation matrices live in `references/` subdirectories within each skill, not inline in the SKILL.md. This keeps SKILL.md files readable while making detailed guidance available when needed.

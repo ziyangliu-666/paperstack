@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+# paperstack setup — register skills with Claude Code
+set -e
+
+PAPERSTACK_DIR="$(cd "$(dirname "$0")" && pwd)"
+SKILLS_DIR="$(dirname "$PAPERSTACK_DIR")"
+
+linked=()
+for skill_dir in "$PAPERSTACK_DIR"/*/; do
+  if [ -f "$skill_dir/SKILL.md" ]; then
+    skill_name="$(basename "$skill_dir")"
+    target="$SKILLS_DIR/$skill_name"
+    if [ -L "$target" ] || [ ! -e "$target" ]; then
+      ln -snf "paperstack/$skill_name" "$target"
+      linked+=("$skill_name")
+    fi
+  fi
+done
+
+if [ ${#linked[@]} -gt 0 ]; then
+  echo "paperstack ready. Linked ${#linked[@]} skills:"
+  for s in "${linked[@]}"; do echo "  /$s"; done
+else
+  echo "paperstack ready. All skills already linked."
+fi
