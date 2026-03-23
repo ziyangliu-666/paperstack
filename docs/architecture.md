@@ -2,13 +2,29 @@
 
 ## Core idea
 
-paperstack chains research artifacts through 8 skills. Each skill reads prior artifacts and writes new ones to deterministic paths. Every skill enforces intellectual rigor through forcing questions — probing questions that demand specificity, challenge assumptions, and refuse vague answers.
+paperstack chains research artifacts through 11 skills. Each skill reads prior artifacts and writes new ones to deterministic paths. Every skill enforces intellectual rigor through forcing questions — probing questions that demand specificity, challenge assumptions, and refuse vague answers.
 
-The skills split into two independent paths:
+The skills split into three paths:
+- **Idea development** (3 skills): idea stress-test → refinement → contribution framing
 - **Research workflow** (7 skills): question framing → reading → critique → synthesis
 - **Author self-review** (1 skill): manuscript → conference-style review → revision checklist
 
 ## Artifact dependency graph
+
+### Idea development
+
+```
+.paperstack/ideas/{idea}.md    (from /idea-test)
+    |
+    v
+.paperstack/briefs/{idea}.md   (from /idea-sharpen, iterative)
+    |
+    v
+  [research pipeline + experiments]
+    |
+    v
+.paperstack/frames/{paper}.md  (from /contribution-frame)
+```
 
 ### Research workflow
 
@@ -60,7 +76,10 @@ venue guidance lookup
 
 | Skill | Reads | Writes |
 |---|---|---|
-| `/draft-review` | Workspace manuscript + support files | `.paperstack/latest-review.md`, `.paperstack/history/*`, `.paperstack/cache/venue-guidance/*` |
+| `/idea-test` | (nothing, or prior idea artifacts) | `.paperstack/ideas/{idea}.md` |
+| `/idea-sharpen` | Prior idea assessment (optional) | `.paperstack/briefs/{idea}.md` |
+| `/contribution-frame` | Experimental results (user-provided) | `.paperstack/frames/{paper}.md` |
+| `/draft-review` | Workspace manuscript + support files | `.paperstack/latest-review.md`, `.paperstack/history/*` |
 | `/research-intake` | (nothing) | `docs/research/current/research-brief.md` |
 | `/literature-map` | `research-brief.md` | `docs/research/current/literature-map.md` |
 | `/paper-triage` | `research-brief.md`, `literature-map.md` | `docs/research/current/reading-queue.md` |
@@ -81,7 +100,10 @@ Each forcing question has four components:
 
 **Why this matters for research**: The most common failure mode in literature review is confirmation bias — reading papers that confirm what you already believe, summarizing instead of critiquing, and hedging instead of taking positions. Forcing questions counter every one of these failure modes.
 
-There are 18 forcing questions across the full workflow:
+There are 33 forcing questions across all workflows:
+- 5 in `/idea-test` (claim, baseline, significance, novelty, cheap test)
+- 5 in `/idea-sharpen` (draft abstract, positioning, mock rebuttal, killer figure, experimental plan)
+- 5 in `/contribution-frame` (elevator pitch, surprise test, fragility, competition, preemptive rejection)
 - 4 in `/research-intake` (intellectual honesty about the question itself)
 - 1 in `/literature-map` (challenging familiarity bias)
 - 1 in `/paper-triage` (relevance vs. familiarity)
@@ -107,6 +129,7 @@ Long rubrics and detailed evaluation matrices live in `references/` subdirectori
 - `research-intake/references/intake-rubric.md` — question sharpness criteria
 - `paper-read/references/multi-lens-rubric.md` — detailed per-lens reading guidance
 - `paper-critic/references/critique-rubric.md` — evaluation matrix with scoring criteria
+- `draft-review/references/review-rubric.md` — pre-submission review dimensions
 
 Skills reference these files with: "Read `references/<filename>` for the detailed rubric."
 
@@ -116,6 +139,6 @@ Skills reference these files with: "Read `references/<filename>` for the detaile
 2. **Deterministic paths**: Every artifact has one canonical location. No ambiguity.
 3. **Append, don't destroy**: Skills update existing artifacts safely. Prior work is preserved.
 4. **Templates define structure**: Required sections are defined in `templates/`. Skills enforce them.
-5. **Minimal but extensible**: 8 skills, not 80. Add more when you need them.
-6. **Independent paths coexist**: The research workflow and author self-review are separate artifact chains. They share critique dimensions but not output paths or artifact dependencies.
-7. **Support files stay narrow**: Draft review reads manuscript-adjacent files by default, not rebuttal or response artifacts from prior review cycles.
+5. **Minimal but extensible**: 11 skills, not 110. Add more when you need them.
+6. **Independent paths coexist**: Idea development, research reading, and author self-review are separate artifact chains. They share critique dimensions but not output paths.
+7. **Iterative by design**: `/idea-sharpen` can be re-run to progressively refine. `/draft-review` preserves history for comparison across revisions.

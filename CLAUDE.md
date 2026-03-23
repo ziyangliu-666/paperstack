@@ -2,6 +2,9 @@
 
 ## Available skills
 
+- `/idea-test` — Pre-commitment idea validation with risk assessment and verdict
+- `/idea-sharpen` — Iterative idea refinement through adversarial questioning
+- `/contribution-frame` — Frame experimental results into a publishable contribution
 - `/draft-review` — Pre-submission reviewer simulation with venue-aware critique and revision checklist
 - `/research-intake` — Define a research question with forcing questions that demand precision
 - `/literature-map` — Map the research landscape around a defined question
@@ -14,7 +17,12 @@
 ## Project structure
 
 ```
-.paperstack/                   Draft review outputs and venue cache
+.paperstack/                   All paperstack outputs (ideas, briefs, frames, reviews)
+  ideas/                       Idea assessments from /idea-test
+  briefs/                      Idea briefs from /idea-sharpen
+  frames/                      Contribution frames from /contribution-frame
+  latest-review.md             Latest draft review
+  history/                     Timestamped review history
 docs/research/current/         Research artifacts for the active topic
 papers/cards/                  Paper cards (one per paper, slug: author-year-shortitle)
 papers/critiques/              Paper critiques (one per paper)
@@ -28,13 +36,18 @@ examples/                      Worked examples
 
 **Paper IDs**: Slugified as `author-year-shortitle`. Example: `lewis-2020-rag`, `vaswani-2017-attention`. Use lowercase, hyphens only. First author's last name.
 
-**Artifact paths**: Research-level artifacts go in `docs/research/current/`. Paper-specific artifacts go in `papers/cards/` and `papers/critiques/`. Draft review artifacts go in `.paperstack/`.
+**Artifact paths**: Research-level artifacts go in `docs/research/current/`. Paper-specific artifacts go in `papers/cards/` and `papers/critiques/`. All idea/review artifacts go in `.paperstack/`.
 
-**Draft review outputs**: `/draft-review` writes to `.paperstack/` in the workspace root. `latest-review.md` is always the most recent review. Timestamped versions are preserved in `.paperstack/history/`. Venue guidance cache files live in `.paperstack/cache/venue-guidance/`. These are real user-facing artifacts plus tool-managed cache, not disposable scratch space.
+**Idea development outputs**: `/idea-test` writes to `.paperstack/ideas/`, `/idea-sharpen` writes to `.paperstack/briefs/`, `/contribution-frame` writes to `.paperstack/frames/`. These are real user-facing artifacts.
+
+**Draft review outputs**: `/draft-review` writes `latest-review.md` and timestamped versions in `.paperstack/history/`.
 
 **Artifact continuity**: Skills append or update existing artifacts. They NEVER destroy prior work. If a research brief already exists, the skill should read it first and ask the user whether to update or start fresh.
 
 **Required prior artifacts**: Each skill declares what it reads. If a required artifact is missing, STOP and tell the user which skill to run first:
+- `/idea-test` requires nothing (the user describes their idea)
+- `/idea-sharpen` reads prior idea assessment if available (optional)
+- `/contribution-frame` requires experimental results (user provides in conversation)
 - `/draft-review` requires a manuscript in the workspace (detects automatically)
 - `/literature-map` requires `research-brief.md`
 - `/paper-triage` requires `research-brief.md` + `literature-map.md`

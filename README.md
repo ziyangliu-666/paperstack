@@ -1,11 +1,12 @@
 # paperstack
 
-A Claude Code skill repository that turns Claude into a rigorous academic research partner — and a brutally honest pre-submission reviewer.
+A Claude Code skill repository that turns Claude into a rigorous academic research partner — from first idea to final submission.
 
-paperstack does two things:
+paperstack covers the full research lifecycle:
 
-1. **Research workflows**: Study a topic through structured reading, adversarial critique, cross-paper comparison, and synthesis.
-2. **Draft review**: Review your own paper before submission. Get conference-style feedback that exposes rejection risk — the kind of structured, uncomfortable, venue-aware critique that real reviewers deliver.
+1. **Idea development**: Stress-test, sharpen, and frame your research ideas before committing months of work.
+2. **Research workflows**: Study a topic through structured reading, adversarial critique, cross-paper comparison, and synthesis.
+3. **Draft review**: Review your own paper before submission. Get conference-style feedback that exposes rejection risk.
 
 ## Why this exists
 
@@ -24,8 +25,17 @@ Pre-submission review requires something harder: simulating the scrutiny of a ho
 | "The paper is interesting" | Specific: WHAT is interesting, WHY, and what evidence supports it |
 | Summary of summaries | Synthesis that identifies consensus, conflicts, and gaps |
 | Submit and pray | Conference-style review before submission, with repair checklist |
+| "Is my idea any good?" | Stress-test with 5 forcing questions before committing months of work |
 
 ## Skills
+
+### Idea Development
+
+| Skill | What it does |
+|---|---|
+| `/idea-test` | Stress-test an idea before you commit. 5 forcing questions on novelty, significance, baselines, and feasibility. Verdict: PURSUE / REFINE / PIVOT / ABANDON. |
+| `/idea-sharpen` | Sharpen a rough idea into a precise contribution. Forces draft abstract, positioning against 3 specific papers, mock rebuttal, killer figure, and experimental plan. |
+| `/contribution-frame` | Frame results into a publishable contribution. Forces articulation of insights over methods, tests structural fragility, preempts rejection. |
 
 ### Research Workflow
 
@@ -47,53 +57,67 @@ Pre-submission review requires something harder: simulating the scrutiny of a ho
 
 ## Workflows
 
-### Research workflow
+### Full lifecycle (idea through submission)
 
 ```
-/research-intake     Define the question
+/idea-test           Is the idea worth pursuing?
+        |
+        v
+/idea-sharpen        Sharpen into a precise claim (repeat until sharp)
+        |
+        v
+/research-intake     Define the reading question
         |
         v
 /literature-map      Map the landscape
         |
         v
-/paper-triage        Decide what to read
+/paper-read          Deep-read each paper
         |
         v
-/paper-read          Deep-read each paper (repeat per paper)
+/paper-critic        Critique each paper
         |
         v
-/paper-critic        Critique each paper (repeat per paper)
+/synthesis           Synthesize findings
         |
         v
-/compare-papers      Compare across papers
+  [run experiments]
         |
         v
-/synthesis           Answer the question
+/contribution-frame  Frame results into a paper
+        |
+        v
+  [write the draft]
+        |
+        v
+/draft-review        Review before submission
 ```
 
-You don't have to run every skill. Skip `/paper-triage` if you already know what to read. Skip `/literature-map` if you're reading a single paper. The sequence is a guide, not a cage.
+You don't have to run every skill. Enter at any point. The sequence is a guide, not a cage.
 
-### Author self-review workflow
+### Quick idea validation
 
 ```
-/draft-review        Review your draft before submission
+/idea-test
 ```
 
-That's it. One command. `/draft-review` scans your workspace for the manuscript, asks for the target venue, and generates:
+One command to stress-test an idea before committing. Get a verdict (PURSUE / REFINE / PIVOT / ABANDON), risk map, and a "next 48 hours" plan.
 
-- A **conference-style review** with verdict, strengths, major/minor concerns, and reviewer questions
-- A **revision checklist** with prioritized repair tasks (MUST-FIX / SHOULD-FIX / NICE-TO-HAVE)
+### Author self-review
 
-Output goes to `.paperstack/` in your workspace — a stable `latest-review.md`, timestamped history, and venue-guidance cache files for repeat runs.
+```
+/draft-review
+```
+
+`/draft-review` scans your workspace for the manuscript, asks for the target venue, and generates a **conference-style review** with a **revision checklist**. Output goes to `.paperstack/`.
 
 ## Who this is for
 
-- **Authors preparing to submit** a paper and wanting honest pre-submission feedback
-- **PhD applicants** preparing research proposals
-- **Graduate students** doing literature reviews
+- **Researchers with a new idea** who want honest validation before committing months
+- **Authors preparing to submit** who want brutally honest pre-submission feedback
+- **PhD students** doing literature reviews or developing thesis proposals
 - **Engineers** reading papers to understand what to implement
-- **Researchers** exploring a new area systematically
-- **Builders** who need paper understanding, not paper collection
+- **Anyone stuck between results and paper** who can't articulate the contribution
 
 ## Install
 
@@ -109,6 +133,9 @@ Add to your project's `CLAUDE.md` or `~/.claude/CLAUDE.md`:
 # paperstack
 
 Available skills:
+- `/idea-test` — stress-test a research idea before committing
+- `/idea-sharpen` — sharpen an idea into a precise contribution
+- `/contribution-frame` — frame results into a publishable paper
 - `/draft-review` — review your own draft before submission
 - `/research-intake` — define research question
 - `/literature-map` — map research landscape
@@ -123,10 +150,12 @@ Available skills:
 
 ```
 paperstack/
-  .paperstack/                 # Draft review outputs (per workspace)
-    latest-review.md           #   Latest review artifact
+  .paperstack/                 # All paperstack outputs (per workspace)
+    ideas/                     #   Idea assessments from /idea-test
+    briefs/                    #   Idea briefs from /idea-sharpen
+    frames/                    #   Contribution frames from /contribution-frame
+    latest-review.md           #   Latest draft review
     history/                   #   Timestamped review history
-    cache/venue-guidance/      #   Cached official venue guidance
   docs/
     architecture.md            # How artifact chaining works
     workflows.md               # Recommended sequences
@@ -140,6 +169,7 @@ paperstack/
   examples/
     sample-topic/              # Research workflow example
     draft-review/              # Draft review output example
+    idea-test/                 # Idea assessment example
   .claude/skills/paperstack/   # Skill definitions
 ```
 
@@ -148,7 +178,7 @@ paperstack/
 1. **Evidence first** — Separate claims from interpretation. Record uncertainty. Never overstate.
 2. **Multi-lens reading** — Every paper analyzed from 6 perspectives, not just summarized.
 3. **Artifact chaining** — Each skill reads prior artifacts and writes new ones. Research builds on itself.
-4. **Forcing questions** — 18 probing questions across the workflow that demand specificity and honesty.
+4. **Forcing questions** — 33 probing questions across all workflows that demand specificity and honesty.
 5. **Anti-sycophancy** — "The paper is interesting" is banned. Say what, why, and with what evidence.
 6. **Local-first** — No database, no web service, no frontend. Plain files in your workspace.
 7. **Loud degradation** — If venue-specific guidance is unavailable, paperstack must say so explicitly and fall back to cache or generic review criteria.
