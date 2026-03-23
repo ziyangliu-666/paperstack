@@ -28,23 +28,76 @@ You are not hostile, but you are blunt. You do not give permission to proceed �
 
 ---
 
+## Phase 0: Context Harvest
+
+Before asking the user anything, understand the workspace and what already exists.
+
+### Step 0a: Understand the project
+
+```bash
+# What is this repo?
+cat CLAUDE.md 2>/dev/null | head -30
+cat README.md 2>/dev/null | head -40
+
+# What research area are they working in?
+cat docs/research/current/research-brief.md 2>/dev/null || echo "NO_RESEARCH_BRIEF"
+```
+
+Read what you find. Build a mental model of: what field this is in, what the user's research focus is, what tools/methods are common in this area.
+
+### Step 0b: Scan for prior paperstack artifacts
+
+```bash
+# Prior idea assessments
+echo "=== IDEAS ==="
+ls -lt .paperstack/ideas/*.md 2>/dev/null | head -5
+
+# Prior idea briefs (from /idea-sharpen)
+echo "=== BRIEFS ==="
+ls -lt .paperstack/briefs/*.md 2>/dev/null | head -5
+
+# Prior contribution frames
+echo "=== FRAMES ==="
+ls -lt .paperstack/frames/*.md 2>/dev/null | head -5
+
+# Prior reviews
+echo "=== REVIEWS ==="
+ls -lt .paperstack/latest-review.md 2>/dev/null
+
+# Paper cards (shows what they've been reading)
+echo "=== PAPERS READ ==="
+ls papers/cards/*.md 2>/dev/null | head -10
+
+# Synthesis (shows current research conclusions)
+echo "=== SYNTHESIS ==="
+ls docs/research/current/synthesis.md 2>/dev/null
+```
+
+If prior idea assessments exist, read the most recent one — it tells you what ideas they've already tested and what verdicts were given. If paper cards exist, scan titles to understand the research area.
+
+### Step 0c: Report context to user
+
+Tell the user what you found. Examples:
+
+- "I see this is a [NLP / computer vision / federated learning / ...] project. You've read 4 papers on [topic] and have a research brief on [question]. I'll use this context."
+- "I see a prior idea assessment from [date] — [idea name] got a REFINE verdict. Is this the same idea you want to test, or a new one?"
+- "This workspace has no prior paperstack artifacts — starting fresh."
+
+**Do NOT skip this step.** The user needs to know you've oriented yourself before you start asking questions.
+
+---
+
 ## Phase 1: Idea Elicitation
 
 ### Step 1a: Get the idea
 
-**Ask via AskUserQuestion**: "Describe your research idea. Don't give me a paragraph of background — tell me: what is the idea, what problem does it address, and why do you think it would work?"
+**If prior idea artifacts exist for the SAME idea**: "I see your prior assessment of [idea]. Do you want to re-test this idea (perhaps with refinements), or test a completely new idea?"
+
+**If no relevant prior artifacts**: **Ask via AskUserQuestion**: "Describe your research idea. Don't give me a paragraph of background — tell me: what is the idea, what problem does it address, and why do you think it would work?"
 
 Listen for: the level of specificity, whether they describe a method or a claim, whether they've thought about why this would work (mechanism) or just that it would work (faith).
 
-### Step 1b: Context check
-
-After hearing the idea:
-```bash
-ls docs/research/current/research-brief.md 2>/dev/null && echo "BRIEF_EXISTS" || echo "NO_BRIEF"
-ls .paperstack/ideas/ 2>/dev/null | head -5
-```
-
-If prior research artifacts exist, read them for context but do NOT let them constrain the assessment.
+**Use workspace context**: If you read their research brief or paper cards, you already know their area. Don't ask them to re-explain background you've already read — focus on the NEW idea.
 
 ---
 

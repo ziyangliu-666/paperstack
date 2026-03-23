@@ -27,27 +27,80 @@ Your job is to extract the contribution from the results — not by summarizing 
 
 ---
 
-## Phase 1: Gather Context
+## Phase 0: Context Harvest
 
-### Step 1a: Read available artifacts
+Before asking the user anything, understand the workspace and the full research journey so far.
+
+### Step 0a: Understand the project
 
 ```bash
-# Check for prior idea artifacts
-ls .paperstack/ideas/*.md 2>/dev/null | head -5
-ls .paperstack/briefs/*.md 2>/dev/null | head -5
+# What is this repo?
+cat CLAUDE.md 2>/dev/null | head -30
+cat README.md 2>/dev/null | head -40
 
-# Check for research artifacts
-cat docs/research/current/research-brief.md 2>/dev/null || echo "NO_BRIEF"
-cat docs/research/current/synthesis.md 2>/dev/null || echo "NO_SYNTHESIS"
-
-# Check for prior contribution frame
-ls .paperstack/frames/*.md 2>/dev/null | head -5
+# Research area context
+cat docs/research/current/research-brief.md 2>/dev/null || echo "NO_RESEARCH_BRIEF"
 ```
 
-If prior artifacts exist, read them for context.
+Read what you find. Build a mental model of the field, the research question, and what methods are standard in this area.
 
-### Step 1b: Get the results
+### Step 0b: Read the full idea development chain
 
+```bash
+# Idea assessment (from /idea-test)
+echo "=== ASSESSMENTS ==="
+ls -lt .paperstack/ideas/*.md 2>/dev/null | head -5
+
+# Idea briefs (from /idea-sharpen)
+echo "=== BRIEFS ==="
+ls -lt .paperstack/briefs/*.md 2>/dev/null | head -5
+
+# Prior contribution frames (re-framing session?)
+echo "=== FRAMES ==="
+ls -lt .paperstack/frames/*.md 2>/dev/null | head -5
+
+# Paper cards and synthesis (evidence context)
+echo "=== PAPERS READ ==="
+ls papers/cards/*.md 2>/dev/null | head -10
+
+echo "=== SYNTHESIS ==="
+cat docs/research/current/synthesis.md 2>/dev/null | head -30 || echo "NO_SYNTHESIS"
+
+# Draft manuscript (if they've started writing)
+echo "=== MANUSCRIPT ==="
+find . -maxdepth 2 \( -name "main.tex" -o -name "paper.tex" -o -name "draft.tex" -o -name "manuscript.tex" -o -name "paper.md" -o -name "draft.md" \) -not -path "./.paperstack/*" -not -path "./.git/*" 2>/dev/null | head -5
+```
+
+**Critical**: Read the most recent idea brief if it exists. It contains:
+- The 1-sentence claim (use as starting point for Q1 elevator pitch)
+- The positioning triangle (3 comparison papers — use for Q4 competition test)
+- The experimental plan (compare with actual results)
+- The mock rebuttal (check if concerns were addressed by results)
+
+If synthesis exists, read it — it's the user's own conclusions from literature and may contain the framing insight.
+
+### Step 0c: Report context and adapt
+
+Tell the user what you found:
+
+- "I've read your idea brief — your claim was '[claim]', positioned against [A, B, C]. Your experimental plan tested [X, Y, Z]. Now I need to hear what actually happened."
+- "I see 6 paper cards and a synthesis. I know the landscape. Let's focus on what YOUR results add to it."
+- "I found a prior contribution frame from [date]. Do you want to refine it with new results, or start fresh?"
+- "No prior idea artifacts — starting from scratch. Tell me about your results."
+
+**Adapt questions based on what's available:**
+- If idea brief exists → Q1 (elevator pitch) starts from the claim; Q4 (competition) starts from positioning triangle
+- If synthesis exists → use it to evaluate whether the user's contribution adds to or contradicts existing findings
+- If prior frame exists → this is a re-framing session; focus on what changed
+
+---
+
+## Phase 1: Get the Results
+
+**If idea brief exists with experimental plan:**
+"Your experimental plan from the idea brief was: [plan]. Tell me what happened — which experiments succeeded, which failed, and what surprised you."
+
+**If no prior context:**
 **Ask via AskUserQuestion**: "Tell me about your results. I need:
 1. What method/approach you used (1-2 sentences, not the full description)
 2. What experiments you ran

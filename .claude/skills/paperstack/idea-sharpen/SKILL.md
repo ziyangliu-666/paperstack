@@ -28,24 +28,80 @@ The difference between a rejected paper and an accepted one is often not the ide
 
 ---
 
-## Phase 1: Read Prior Artifacts
+## Phase 0: Context Harvest
+
+Before asking the user anything, understand the workspace and what already exists.
+
+### Step 0a: Understand the project
 
 ```bash
-# Check for prior idea assessment
-ls .paperstack/ideas/*.md 2>/dev/null | head -10
+# What is this repo?
+cat CLAUDE.md 2>/dev/null | head -30
+cat README.md 2>/dev/null | head -40
 
-# Check for prior idea brief
-ls .paperstack/briefs/*.md 2>/dev/null | head -10
-
-# Check for research brief (optional context)
-cat docs/research/current/research-brief.md 2>/dev/null || echo "NO_BRIEF"
+# What research area are they working in?
+cat docs/research/current/research-brief.md 2>/dev/null || echo "NO_RESEARCH_BRIEF"
 ```
 
-If a prior idea assessment from `/idea-test` exists, read it and use the verdict/risks as starting context.
+Read what you find. Build a mental model of the research area — you need this to evaluate whether positioning and experimental plans make sense.
 
-If a prior idea brief from a previous `/idea-sharpen` run exists, read it. Ask: "I see a previous version of this idea brief. Do you want to sharpen it further, or start fresh?"
+### Step 0b: Read prior idea artifacts
 
-If no prior artifacts exist, ask the user to describe their idea directly.
+```bash
+# Prior idea assessment (from /idea-test)
+echo "=== ASSESSMENTS ==="
+ls -lt .paperstack/ideas/*.md 2>/dev/null | head -5
+
+# Prior idea briefs (from previous /idea-sharpen runs)
+echo "=== BRIEFS ==="
+ls -lt .paperstack/briefs/*.md 2>/dev/null | head -5
+
+# Paper cards (shows what they've been reading — useful for positioning)
+echo "=== PAPERS READ ==="
+ls papers/cards/*.md 2>/dev/null | head -10
+
+# Literature map and synthesis
+echo "=== RESEARCH ==="
+ls docs/research/current/literature-map.md docs/research/current/synthesis.md 2>/dev/null
+```
+
+**Critical**: If a prior idea assessment exists, READ IT. It contains:
+- The falsifiable claim (use as starting point for Q1)
+- The risk map (adapt questions to focus on unresolved risks)
+- The baseline threat (pre-fills Q2 positioning context)
+- The verdict and reasoning
+
+If prior briefs from a previous `/idea-sharpen` run exist, READ the most recent one — this is an iterative refinement session.
+
+If paper cards exist, read at least 3 titles + summaries — these are candidates for the positioning triangle (Q2).
+
+### Step 0c: Report context and determine entry point
+
+Tell the user what you found:
+
+- "I found your idea assessment for [idea] — verdict was REFINE. The main risk was [X]. I also see 5 paper cards in your workspace — I'll use those for positioning. Let's sharpen this."
+- "I see a prior brief from [date] — pass #2. I'll read it and push you further on the weak sections."
+- "No prior idea artifacts. Tell me about your idea."
+
+**Adapt entry point based on context:**
+- If prior assessment exists → skip asking for the idea description; start from the claim in the assessment
+- If prior brief exists → skip Q1 (draft abstract); focus on whichever sections the prior brief rated weakest
+- If paper cards exist → pre-populate positioning candidates for Q2 instead of asking from scratch
+
+---
+
+## Phase 1: Establish Starting Point
+
+**If prior idea assessment from `/idea-test` exists:**
+Read the claim and tell the user: "Your claim from the assessment was: '[claim]'. Has anything changed, or should I start from here?"
+
+**If prior idea brief from a previous `/idea-sharpen` run exists:**
+Read it and ask: "I see your previous brief (pass #{N}). Do you want to sharpen it further ('push harder on the weak parts') or start fresh?"
+
+**If no prior artifacts exist:**
+Ask: "Describe your idea and what you're trying to achieve. If you can state it as a claim — 'I claim that X because Y' — even better."
+
+Use workspace context: if you read their CLAUDE.md or research brief, you already know the domain. Don't ask them to re-explain the field.
 
 ---
 

@@ -22,6 +22,29 @@ You are a research advisor whose job is to ensure the question is sharp before a
 
 ---
 
+## Phase 0: Understand the Workspace
+
+Before asking any questions, understand what this project is and what already exists.
+
+```bash
+# What is this repo?
+cat CLAUDE.md 2>/dev/null | head -30
+cat README.md 2>/dev/null | head -40
+
+# Any idea artifacts? (user may be coming from /idea-test → /idea-sharpen flow)
+echo "=== IDEA ARTIFACTS ==="
+ls -lt .paperstack/ideas/*.md 2>/dev/null | head -3
+ls -lt .paperstack/briefs/*.md 2>/dev/null | head -3
+```
+
+Read what you find. If idea artifacts exist, read the most recent one — the user's research question likely connects to the idea they've been developing.
+
+If CLAUDE.md/README.md describe the project, use that to understand the research domain BEFORE asking the user to describe it.
+
+**Report what you found**: "I see this is a [domain] project. You have a prior idea brief on [topic]. Is your research question related to this idea?"
+
+---
+
 ## Phase 1: Context Gathering
 
 1. Check for existing research artifacts:
@@ -36,7 +59,9 @@ You are a research advisor whose job is to ensure the question is sharp before a
    > A) Refine the existing brief
    > B) Start a new research topic (existing brief will be archived)
 
-3. Ask the user what they want to research. Listen carefully to their framing — it reveals their assumptions.
+3. **If idea artifacts exist and are relevant**: "Your idea brief is about [topic]. Do you want to research around this idea, or explore a different area?"
+
+4. **Otherwise**: Ask the user what they want to research. Listen carefully to their framing — it reveals their assumptions.
 
 ---
 

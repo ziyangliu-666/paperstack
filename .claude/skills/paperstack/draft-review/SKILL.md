@@ -99,6 +99,29 @@ Read all referenced files that exist. If some are missing, note "reduced context
 
 **Record exactly which files were read** — this becomes the provenance header.
 
+### Step 0e: Gather project and idea context
+
+```bash
+# Understand the project
+cat CLAUDE.md 2>/dev/null | head -30
+cat README.md 2>/dev/null | head -40
+
+# Read idea development artifacts (inform review focus)
+echo "=== IDEA ARTIFACTS ==="
+ls -lt .paperstack/ideas/*.md 2>/dev/null | head -3
+ls -lt .paperstack/briefs/*.md 2>/dev/null | head -3
+ls -lt .paperstack/frames/*.md 2>/dev/null | head -3
+```
+
+If idea artifacts exist, read the most recent ones. They provide:
+- **Idea assessment**: The original claim and risk map — check if the manuscript addresses the identified risks
+- **Idea brief**: The positioning triangle (3 comparison papers) — check if the manuscript cites and differentiates from them
+- **Contribution frame**: The contribution statement and story arc — check if the manuscript delivers this narrative
+
+If found, note in provenance: "Used idea development context from .paperstack/ to inform review focus."
+
+**This context makes the review more targeted**: instead of generic review criteria, the reviewer can check whether the paper DELIVERS on its OWN stated goals from earlier in the pipeline.
+
 ---
 
 ## Phase 1: Venue Context
