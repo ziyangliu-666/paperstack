@@ -121,30 +121,37 @@ One command to stress-test an idea before committing. Get a verdict (PURSUE / RE
 
 ## Install
 
-Clone this repository:
+### Option A: One-liner (paste into Claude Code)
+
+Open Claude Code and paste this:
+
+> Install paperstack: run **`git clone https://github.com/ziyangliu-666/paperstack.git ~/.claude/skills/paperstack`** then add a "paperstack" section to CLAUDE.md that lists the available skills: /idea-test, /idea-sharpen, /contribution-frame, /draft-review, /research-intake, /literature-map, /paper-triage, /paper-read, /paper-critic, /compare-papers, /synthesis.
+
+Claude does the rest.
+
+### Option B: Manual install
 
 ```bash
-git clone <repo-url> ~/.claude/skills/paperstack
+git clone https://github.com/ziyangliu-666/paperstack.git ~/.claude/skills/paperstack
 ```
 
-Add to your project's `CLAUDE.md` or `~/.claude/CLAUDE.md`:
+Add to your `CLAUDE.md` (project or `~/.claude/CLAUDE.md`):
 
 ```markdown
-# paperstack
-
-Available skills:
-- `/idea-test` — stress-test a research idea before committing
-- `/idea-sharpen` — sharpen an idea into a precise contribution
-- `/contribution-frame` — frame results into a publishable paper
-- `/draft-review` — review your own draft before submission
-- `/research-intake` — define research question
-- `/literature-map` — map research landscape
-- `/paper-triage` — prioritize reading
-- `/paper-read` — deep-read a paper
-- `/paper-critic` — adversarial critique
-- `/compare-papers` — cross-paper comparison
-- `/synthesis` — synthesize findings
+## paperstack
+Available skills: /idea-test, /idea-sharpen, /contribution-frame, /draft-review,
+/research-intake, /literature-map, /paper-triage, /paper-read, /paper-critic,
+/compare-papers, /synthesis.
 ```
+
+### Add to a repo (so collaborators get it)
+
+```bash
+cp -Rf ~/.claude/skills/paperstack .claude/skills/paperstack
+rm -rf .claude/skills/paperstack/.git
+```
+
+Commit `.claude/skills/paperstack/` to your repo. `git clone` just works for everyone.
 
 ## Project structure
 
